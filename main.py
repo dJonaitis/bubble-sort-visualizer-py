@@ -13,8 +13,8 @@ window = pygame.display.set_mode((width, height))
 
 originalArray = []
 mainArr = []
-arrLength = 75 # the amount of items in array
-maxVal = 100 # the maximum value an item in the array can be
+arrLength = 100 # the amount of items in array
+maxVal = 120 # the maximum value an item in the array can be
 gap = 3 # gap between columns
 colWidth = 10
 
@@ -30,7 +30,6 @@ def initArr():
 
 def init():
     initArr()
-
     main()
 
 def draw(index):
@@ -49,6 +48,7 @@ def draw(index):
 def main():
     run = True
     start = False
+    sort = 'insertion'
 
     while run:
         pygame.event.pump()
@@ -58,25 +58,42 @@ def main():
                 pygame.display.quit()
                 pygame.quit()
                 sys.exit()
-            if pygame.mouse.get_pressed()[0]:
-                start = True
+            if start == False:
+                if pygame.mouse.get_pressed()[0]:
+                    start = True
 
         # sorting
         if start:
-            for i in range(len(mainArr) - 1):
-                swapped = False
-                for j in range(len(mainArr) - i - 1):
-                    if mainArr[j] > mainArr[j + 1]:
-                        swapped = True
-                        temp = mainArr[j]
-                        mainArr[j] = mainArr[j + 1]
-                        mainArr[j + 1] = temp
+            if sort == 'bubble':
+                for i in range(len(mainArr) - 1):
+                    swapped = False
+                    for j in range(len(mainArr) - i - 1):
+                        if mainArr[j] > mainArr[j + 1]:
+                            swapped = True
+                            temp = mainArr[j]
+                            mainArr[j] = mainArr[j + 1]
+                            mainArr[j + 1] = temp
+                        pygame.time.delay(60)
+                        draw(j)
+                        pygame.display.update()
+
+                    if  not swapped: 
+                        break
+            if sort == 'insertion':
+                for i in range(1, len(mainArr)):
+                    key = mainArr[i]
+                    j = i - 1
+                    while j >= 0 and key < mainArr[j]:
+                        mainArr[j + 1] = mainArr[j]
+                        j = j - 1
+                    mainArr[j + 1] = key
                     pygame.time.delay(60)
                     draw(j)
                     pygame.display.update()
 
-                if  not swapped: 
-                    break
+                    if sorted(mainArr) == mainArr:
+                        break
+
         
         pygame.display.update()
         draw(None)
